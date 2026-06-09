@@ -29,7 +29,7 @@ class StoreRegisterRequest extends FormRequest
             'first_name' => ['required'],
             'last_name' => ['required'],
             'email_address' => ['required','email','unique:users_table,email_address'],
-            'mobile_number' => ['required','string'],
+            'mobile_number' => ['required', 'string', 'regex:/^09\d{9}$/'],
             'password' => ['required','min:8','regex:/^\S*(?=\S{8,})(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[\d])\S*$/'],
             'address' => ['required'],
             'status' => [new Enum(EStatus::class)]
@@ -42,6 +42,7 @@ class StoreRegisterRequest extends FormRequest
         return [
             'email_address.exists' => 'Email is already registered on an account. Please use another email.',
             'mobile_number.required' => 'Mobile Number is required',
+            'mobile_number.regex' => 'Mobile number is invalid',
             'password.regex' => 'The password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number.',
         ];
     }

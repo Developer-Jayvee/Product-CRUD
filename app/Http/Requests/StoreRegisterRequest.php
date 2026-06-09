@@ -28,7 +28,7 @@ class StoreRegisterRequest extends FormRequest
         return [
             'first_name' => ['required'],
             'last_name' => ['required'],
-            'email_address' => ['email','exists:users_table,email'],
+            'email_address' => ['required','email','unique:users_table,email_address'],
             'mobile_number' => ['required','string'],
             'password' => ['required','min:8','regex:/^\S*(?=\S{8,})(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[\d])\S*$/'],
             'address' => ['required'],

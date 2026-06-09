@@ -16,7 +16,10 @@ class AuthController extends Controller
     }
     public function login(LoginRequest $request)
     {
+        $email = $request->only('email')['email'];
+        $password = $request->only('password')['password'];
 
+        return $this->_authService->login($email,$password , $request);
     }
 
     public function register(StoreRegisterRequest $request)

@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Override;
 
 class LoginRequest extends FormRequest
 {
@@ -12,7 +13,7 @@ class LoginRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,7 +24,15 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'email' => ['required','exists:users_table,email_address'],
+            'password' => ['required','string']
+        ];
+    }
+    #[Override]
+    public function messages()
+    {
+        return [
+            'email.exists' => "User credentials doesn't exist"
         ];
     }
 }

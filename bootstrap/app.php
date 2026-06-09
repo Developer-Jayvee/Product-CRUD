@@ -1,8 +1,11 @@
 <?php
 
+use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Http\Request;
+use PHPUnit\Framework\MockObject\Generator\DuplicateMethodException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -15,5 +18,13 @@ return Application::configure(basePath: dirname(__DIR__))
         //
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+        $exceptions->render(function(UniqueConstraintViolationException $ex,Request $request){
+            if($request->is("api/v1/register")){
+                return response()->json([
+                    'message' => 'This user info is already registered.',
+                    'data' => []
+                ],409);
+
+            }
+        });
     })->create();

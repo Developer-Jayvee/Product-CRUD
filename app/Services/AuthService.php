@@ -39,7 +39,7 @@ class AuthService
                     'user' => $user->makeHidden(["password","id"])
                 ]
             ])->cookie(
-                'auth-token',
+                self::TOKEN,
                 $token,
                 60,
                 '/',

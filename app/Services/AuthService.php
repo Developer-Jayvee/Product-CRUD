@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class AuthService
@@ -26,28 +27,22 @@ class AuthService
     {
         try {
             $user = User::whereEmailAddress($email)->first();
-            if(!Hash::check($password,$user->password)){
+
+            if(!Auth::attempt(['email_address' => $email, 'password' => $password])){
                 return response()->json([
                     'message' => 'Invalid credentails.'
                 ],400);
             }
-            $token = $user->createToken(self::TOKEN)->plainTextToken;
+            // $token = $user->createToken(self::TOKEN)->plainTextToken;
 
             return response()->json([
                 'message' => 'User login successfully',
                 'data' => [
                     'user' => $user->makeHidden(["password","id"])
                 ]
-            ])->cookie(
-                self::TOKEN,
-                $token,
-                60,
-                '/',
-                null,
-                true,
-                true
-            );
+            ]);
         } catch (\Throwable $th) {
+            dd($th);
             throw $th;
         }
     }

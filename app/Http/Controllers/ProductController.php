@@ -5,10 +5,18 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Models\Product;
+use App\Services\ProductService;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
 
 class ProductController extends Controller
 {
+
+    private readonly ProductService $_productService;
+
+
+    public function __construct(ProductService $productService) {
+        $this->_productService = $productService;
+    }
     /**
      * Display a listing of the resource.
      */
@@ -30,7 +38,11 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
-        //
+        try {
+            return $this->_productService->createProduct($request->input());
+        } catch (\Throwable $th) {
+            return response()->json($th,500);
+        }
     }
 
     /**

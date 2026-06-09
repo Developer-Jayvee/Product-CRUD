@@ -2,8 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\EStatus;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
 
 class StoreProductRequest extends FormRequest
 {
@@ -12,7 +14,7 @@ class StoreProductRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,7 +25,11 @@ class StoreProductRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'product_name' => ['required'],
+            'product_description' => ['required'],
+            'quantity' => ['required','integer'],
+            'price' => ['required','integer'],
+            'status' =>[new Enum(EStatus::class)]
         ];
     }
 }
